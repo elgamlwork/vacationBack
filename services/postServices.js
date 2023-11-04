@@ -16,7 +16,6 @@ module.exports.createPost = asyncHandler(async (req, res) => {
         for (file of req.files) {
             const pathImage = path.join(__dirname, `../images/postIamge/${file.filename}`)
             const uploadImage = await uploadPhoto(pathImage);
-            console.log(uploadImage);
             const imageObj = { url: uploadImage.secure_url, publicId: uploadImage.public_id };
             imageContent.push(imageObj);
             fs.unlinkSync(pathImage);
@@ -116,12 +115,13 @@ module.exports.toggleLikePost = asyncHandler(async (req, res) => {
 module.exports.updatePost = asyncHandler(async (req, res) => {
     const { id: postId } = req.params;
     const { description, publicId } = req.body;
+    console.log(description)
     const { id: userId } = req.user;
 
     if (description) {
         const { error } = updatePostValidation({ description });
         if (error) {
-            return res.status(40).json({ message: error.details });
+            return res.status(400).json({ message: error.details });
         }
     };
     

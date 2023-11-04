@@ -1,8 +1,8 @@
-const foundError = (req,res,next) => {
+const foundError = (req, res, next) => {
     const error = new Error({ message: `Not found ${req.originalUrl}` });
     res.status(404);
     next(error);
-}
+};
 
 
 const handleError = (error, req, res, next) => {
