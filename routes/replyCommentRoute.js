@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const validateId = require("../middlewares/validation/validateId");
+const { validateId } = require("../middlewares/validation/validateId");
 const { createReplyComment, getReplyCommentPost, editComment, deleteReplyComment } = require("../services/replyCommentService");
 const { verifyToken } = require("../utils/verifyToken/verifyToken");
 

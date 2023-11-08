@@ -39,7 +39,19 @@ module.exports.getAllComment = asyncHandler(async (req, res) => {
     res.status(200).json(allComment);
 })
 
+// get comment by Id......................................................................
+
+module.exports.getCommentById = asyncHandler(async (req, res) => {
+    const { id: commentId } = req.params;
+    const comment = await commentModel
+        .findById(commentId)
+        .populate("userId", ["-password"])
+        .populate("postId")
+        .populate("replyComments");
+    res.status(200).json(comment);
+});
 // get all comment comment by postId......................................................
+
 
 module.exports.getAllCommentByPostId = asyncHandler(async (req, res) => {
     const { id: postId } = req.params;
@@ -50,8 +62,7 @@ module.exports.getAllCommentByPostId = asyncHandler(async (req, res) => {
         .populate("postId")
         .populate("replyComments");
     res.status(200).json(allComment);
-})
-
+});
 // toggle like at comment......................................................
 
 module.exports.toggleLikeComment = asyncHandler(async (req, res) => {
@@ -84,6 +95,11 @@ module.exports.updateComments = asyncHandler(async (req, res) => {
     const { id: userId } = req.user;
     const { id: commentId } = req.params;
     const { comment } = req.body;
+    const { error } = updateComment({comment});
+
+    if (error) {
+        return res.status(400).json({ message: error.message });
+    }
     let updateUserComment = await commentModel.findById(commentId);
 
     if (!updateUserComment) {
@@ -94,11 +110,7 @@ module.exports.updateComments = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "You can't access of this comment" });
     }
 
-    const { error } = updateComment({comment});
 
-    if (error) {
-        return res.status(401).json({ message: error.message });
-    }
 
     updateUserComment = await commentModel.findByIdAndUpdate(commentId,
         { $set: { comment } },
@@ -132,6 +144,5 @@ module.exports.deleteComment = asyncHandler(async (req, res) => {
             }
         }
     }
-    console.log(allComments);
     res.status(200).json(allComments);
 });

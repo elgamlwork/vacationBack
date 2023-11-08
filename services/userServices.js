@@ -113,7 +113,6 @@ module.exports.getSuggestUser = asyncHandler(async (req, res) => {
 
 module.exports.UpdateUserProfile = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    console.log(req.body);
     const { userName, bio } = req.body;
     const { error } = validationUpdateUser({ userName, bio });
     if (error) {

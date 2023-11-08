@@ -14,7 +14,7 @@ const createComment = (obj) => {
 
 const updateComment = (obj) => {
     const schema = joi.object({
-        comment: joi.string().required()
+        comment: joi.string().required().min(1)
     })
     return schema.validate(obj);
 };

@@ -10,7 +10,7 @@ const {
     deleteUserAvatar,
     searchFriends,
 } = require('../services/userServices');
-const validateId = require('../middlewares/validation/validateId');
+const { validateId } = require('../middlewares/validation/validateId');
 const { verifyTokenAndOnlyUser, verifyToken } = require('../utils/verifyToken/verifyToken');
 const photoUpload = require('../middlewares/uploadPhoto/uploadPhoto');
 

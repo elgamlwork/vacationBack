@@ -1,7 +1,7 @@
 const { createPost, getProfilePosts, toggleLikePost, getPostsHome, updatePost, removePostImage, removePost, getPostById } = require('../services/postServices');
 const { verifyToken, verifyTokenAndOnlyUser } = require('../utils/verifyToken/verifyToken');
 const upload = require('../middlewares/uploadPhoto/upolaodPhotoAndVideo');
-const validateId = require('../middlewares/validation/validateId');
+const { validateId } = require('../middlewares/validation/validateId');
 const router = require('express').Router();
 
 router.route('/create-post/:id').post(verifyTokenAndOnlyUser, upload.array('imageUrl'), createPost);
