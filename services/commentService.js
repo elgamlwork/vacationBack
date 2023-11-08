@@ -123,7 +123,7 @@ module.exports.updateComments = asyncHandler(async (req, res) => {
 
 module.exports.deleteComment = asyncHandler(async (req, res) => {
     const { id: userId } = req.user;
-    const { id: commentId } = req.params;
+    const { postId, commentId } = req.params;
 
     let deleteComment = await commentModel.findById(commentId).populate("postId");
     if (!deleteComment) {
@@ -144,5 +144,6 @@ module.exports.deleteComment = asyncHandler(async (req, res) => {
             }
         }
     }
-    res.status(200).json(allComments);
+    const commentPost = await commentModel.find({ postId }).sort({ createdAt: -1 });
+    res.status(200).json(commentPost);
 });
