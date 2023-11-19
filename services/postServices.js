@@ -115,7 +115,6 @@ module.exports.toggleLikePost = asyncHandler(async (req, res) => {
 module.exports.updatePost = asyncHandler(async (req, res) => {
     const { id: postId } = req.params;
     const { description, publicId } = req.body;
-    console.log(description)
     const { id: userId } = req.user;
 
     if (description) {
@@ -136,13 +135,24 @@ module.exports.updatePost = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'you can\'t access of this post' });
     }
     if (publicId) {
-        await removePhoto(publicId);
-    };
-    imageUrl = imageUrl.filter(imageUrl => {
-    if (imageUrl.publicId !== publicId) {
-        return imageUrl;
+        if (typeof publicId === 'string') {
+            await removePhoto(publicId);
+            imageUrl = imageUrl.filter(imageUrl => {
+                if (imageUrl.publicId !== publicId) {
+                    return imageUrl;
+                }
+            });
+        } else {
+            for (let id of publicId) {
+                await removePhoto(id);
+                imageUrl = imageUrl.filter(imageUrl => {
+                    if (imageUrl.publicId !== id) {
+                        return imageUrl;
+                    }
+                });
+            }
+        };
     }
-});
     if (req.files) {
         for (file of req.files) {
             const pathImage = path.join(__dirname, `../images/postIamge/${file.filename}`)
@@ -156,7 +166,7 @@ module.exports.updatePost = asyncHandler(async (req, res) => {
         { $set: { description, imageUrl } },
         { new: true });
     res.status(200).json(post);
-})
+});
 
 // remove post's iamge ..........................................................................
 
