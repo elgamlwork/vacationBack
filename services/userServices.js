@@ -47,7 +47,7 @@ module.exports.login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const { error } = validationLogin({ email, password });
     if (error) {
-        return res.status(400).json({ message: error.details});
+        return res.status(400).json({ message: 'Email or Password is not correct'});
     };
     const user = await userModel.findOne({ email });
     if (user) {
@@ -65,10 +65,10 @@ module.exports.login = asyncHandler(async (req, res) => {
                 }
             })
         } else {
-            res.status(400).json({ message: 'Your password is not correct' });
+            res.status(400).json({ message: 'Email or Password is not correct' });
         }
     } else {
-        res.status(404).json({ message: `This email:${email} not found` });
+        res.status(404).json({ message: `Email or Password is not correct` });
     }
 });
 
